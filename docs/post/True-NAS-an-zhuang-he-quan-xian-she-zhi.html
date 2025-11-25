@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="### 前期准备工作
+TrueNAS Scale 下载地址：https://www.truenas.com/download-truenas-scale/
+下载文件说明：您下载的文件将是一个 .iso 格式的镜像文件，文件名类似于：TrueNAS-SCALE-24.10.0.iso 这个文件用于制作安装盘。">
+<meta property="og:title" content="True-NAS安装和权限设置">
+<meta property="og:description" content="### 前期准备工作
+TrueNAS Scale 下载地址：https://www.truenas.com/download-truenas-scale/
+下载文件说明：您下载的文件将是一个 .iso 格式的镜像文件，文件名类似于：TrueNAS-SCALE-24.10.0.iso 这个文件用于制作安装盘。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://MTnetworks.github.io/mtwl-blog.github.io/post/True-NAS-an-zhuang-he-quan-xian-she-zhi.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>True-NAS安装和权限设置</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">True-NAS安装和权限设置</h1>
+<div class="title-right">
+    <a href="https://MTnetworks.github.io/mtwl-blog.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/MTnetworks/mtwl-blog.github.io/issues/3" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h3>前期准备工作</h3>
+<p>TrueNAS Scale 下载地址：<a href="https://www.truenas.com/download-truenas-scale/" rel="nofollow">https://www.truenas.com/download-truenas-scale/</a><br>
+下载文件说明：您下载的文件将是一个 .iso 格式的镜像文件，文件名类似于：TrueNAS-SCALE-24.10.0.iso 这个文件用于制作安装盘。<br>
+安装前的准备工作<br>
+<strong>制作启动盘：</strong><br>
+您需要一个至少 8GB 的 U 盘。<br>
+使用刻录工具将下载的 .iso 文件写入 U 盘。<br>
+<strong>推荐刻录工具：</strong><br>
+Rufus (Windows)： <a href="https://rufus.ie/" rel="nofollow">https://rufus.ie/</a><br>
+balenaEtcher (Windows/macOS/Linux)： <a href="https://www.balena.io/etcher/" rel="nofollow">https://www.balena.io/etcher/</a><br>
+硬件要求：<br>
+内存：最低 8GB，强烈推荐 16GB 或以上，尤其是计划使用 ZFS 或运行较多应用时。<br>
+存储：至少一块硬盘用于安装系统（推荐 16GB 以上的 SSD 以获得最佳性能），外加多块硬盘用于组建存储池。<br>
+启动方式：确保您的服务器/电脑 BIOS/UEFI 已设置为从您制作的 U 盘启动。<br>
+**重要提示：**TrueNAS 系统会独占安装它的整个磁盘。该磁盘将无法再用于存储数据。<br>
+数据存储盘和系统安装盘是分开的。您用 U 盘安装系统到另一块 SSD 上，然后用其他的硬盘来存放您的电影、文档等数据。<br>
+<strong>### 总结步骤</strong></p>
+<ol>
+<li>访问 <a href="https://www.truenas.com/download-truenas-scale/" rel="nofollow">https://www.truenas.com/download-truenas-scale/</a> 下载 ISO 文件。</li>
+<li>使用 Rufus 或 balenaEtcher 将 ISO 文件写入 U 盘，制作成安装盘。</li>
+<li>将安装盘插入您打算用作 NAS 的主机，并设置从 U 盘启动。</li>
+<li>按照屏幕提示进行安装（过程通常很简单，主要是选择系统安装的磁盘和设置管理员密码）。</li>
+<li>安装完成后，重启并拔掉 U 盘，系统会正常启动。</li>
+<li>根据屏幕上显示的 IP 地址，在您同一局域网内的电脑浏览器上访问该 IP，即可进入 TrueNAS 强大的 Web 管理界面。</li>
+</ol>
+<h3>🛠️ 创建数据集</h3>
+<p><strong>创建数据集 (Create Dataset)</strong><br>
+数据集（Dataset）是在存储池内创建的逻辑分区，帮你更好地管理和配置不同类别的数据。</p>
+<ul>
+<li>**操作路径：**在TrueNAS Web管理界面，进入 Storage &gt; Pools。</li>
+<li><strong>如何操作</strong>：找到你已创建的存储池，点击池右边的"三点菜单"图标，然后选择 Add Dataset。</li>
+<li>**关键设置：**为新数据集命名（例如 Documents），其他高级设置（如压缩、加密）初期可保持默认。</li>
+</ul>
+<p><strong>配置用户与权限</strong></p>
+<p>为日常使用创建独立用户并分配合适的权限，是保证系统安全的重要一环。</p>
+<ul>
+<li>
+<p>**创建用户：**进入 Credentials &gt; Local Users，点击 Add。填写用户名、密码等基本信息。可以勾选"Microsoft Account"选项以更好地兼容SMB共享。</p>
+</li>
+<li>
+<p>**设置权限：**进入 Storage &gt; Pools，找到特定数据集，点击其右边的"三点菜单"，选择 Edit Permissions。将"用户"和"组"设置为刚创建的用户，并勾选"Apply User"和"Apply Group"。</p>
+</li>
+</ul>
+<p><strong>设置文件共享 (File Sharing)</strong></p>
+<p>TrueNAS支持多种共享协议，其中SMB/CIFS最适合在Windows局域网中使用。</p>
+<ul>
+<li>**创建SMB共享：**进入 Sharing &gt; Windows Shares (SMB)，点击 Add。</li>
+<li>**指定路径：**在"Path"中选择你刚才创建的数据集。</li>
+<li>**启用服务：**共享创建后，系统可能会提示你启动SMB服务，记得选择"自动启动"。</li>
+</ul>
+<p>完成设置后，你可以在局域网其他电脑的文件资源管理器地址栏输入\&lt;TrueNAS的IP地址&gt;来访问共享文件夹。<br>
+<strong>配置网络与服务</strong></p>
+<ul>
+<li>**设置静态IP：**在TrueNAS控制台菜单或Web界面的 Network 部分，为你的NAS设置一个静态IP地址。这能确保设备的网络地址固定不变。</li>
+<li>**检查服务：**进入 Services 列表，确保你使用的共享服务（如SMB）已设置为"自动启动"。</li>
+</ul>
+<h3><strong>如何配置共享权限</strong></h3>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/c1a11071-dce8-4147-998c-72b20cf403f9"><img width="567" height="1821" alt="Image" src="https://github.com/user-attachments/assets/c1a11071-dce8-4147-998c-72b20cf403f9" style="max-width: 100%; height: auto; max-height: 1821px;"></a></p>
+<p><strong>步骤一：（强烈推荐）创建本地用户</strong><br>
+为了系统安全，不建议一直使用 root 账户。为日常使用创建一个独立的用户。</p>
+<ol>
+<li><strong>进入 Credentials（凭证） &gt; Local Users（本地用户）。</strong></li>
+<li>点击 <strong>Add（添加）</strong>。</li>
+<li><strong>填写用户信息：</strong><br>
+**Full Name（全名）：**可选，如 John Doe。<br>
+**Username（用户名）：**必填，这是登录共享时用的名字，如 john。<br>
+**Password（密码） 和 Confirmation（确认密码）：**设置一个强密码。<br>
+**勾选 “Microsoft Account”：**<strong>这个选项很重要</strong>，确保它与 SMB 协议兼容。</li>
+<li>点击 <strong>Save（保存）</strong>。</li>
+</ol>
+<p><strong>步骤二：配置 SMB 共享</strong><br>
+这是核心步骤，告诉 TrueNAS 将哪个目录共享到网络上。</p>
+<ol>
+<li><strong>进入 Sharing（共享） &gt; Windows Shares (SMB)。</strong></li>
+<li>点击右上角的 <strong>ADD（添加）</strong>。</li>
+<li>在 <strong>Basic（基本）</strong> 配置中：</li>
+</ol>
+<ul>
+<li><strong>Path（路径）</strong>：点击下拉菜单，浏览并选择你在 步骤一 中创建的数据集（例如 /mnt/your-pool/documents）。</li>
+<li><strong>Name（名称）</strong>：这是共享在网络上显示的名称。可以和数据集名称相同，也可以不同（例如 Public Docs）。</li>
+<li><strong>Description（描述）</strong>：可选，用于说明这个共享的用途。</li>
+</ul>
+<ol start="4">
+<li>其他设置保持默认即可，点击 <strong>Save（保存）</strong>。</li>
+</ol>
+<p><strong>步骤三：设置权限（确保用户可以访问）</strong><br>
+现在你需要确保在 步骤二 创建的用户对这个数据集有访问权限。</p>
+<ol>
+<li>返回 <strong>Storage（存储） &gt; Pools（存储池）</strong>。</li>
+<li>找到你用于共享的那个数据集，点击右边的 ... 按钮，然后选择 <strong>Edit Permissions（编辑权限）</strong>。</li>
+<li>在弹出的权限编辑器窗口中：</li>
+</ol>
+<ul>
+<li>**User（用户）：**选择你创建的用户（如 john）。</li>
+<li>**Group（组）：**可以选择 users。</li>
+<li>**权限：**根据你的需要设置。对于简单的读写访问，可以勾选 <strong>Read（读）、Write（写） 和 Execute（执行）</strong>。</li>
+<li>**重要：**勾选 <strong>Apply User（应用用户） 和 Apply Group（应用组）</strong> 选项。这将把权限递归地应用到该数据集内的所有现有文件和文件夹。</li>
+</ul>
+<p>4.点击 <strong>Save（保存）</strong>。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://MTnetworks.github.io/mtwl-blog.github.io">铭泰网络的博客</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","MTnetworks/mtwl-blog.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>
