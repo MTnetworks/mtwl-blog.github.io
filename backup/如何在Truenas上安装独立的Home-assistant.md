@@ -24,6 +24,21 @@
 
 1. 进入PE后启动网络
 2. 通过浏览器下载Homeassistant镜像文件，下载地址：https://www.home-assistant.io/installation/generic-x86-64/
-3. 下载完后解压得到IMG文件，
-4. 然后通过DiskGenius工具将IMG文件恢复至镜像系统盘
-5. 重启得到home-assistant管理地址
+3. 下载完后解压得到IMG文件。
+
+**3.通过[Ubuntu Desktop试用版](https://ubuntu.com/tutorials/try-ubuntu-before-you-install)进行安装Homeassistant系统**
+
+1. 提前将Ubuntu Desktop镜像文件ISO放入共享文件里
+2. 修改设备类型：将CD-ROM文件修改为Ubuntu Desktop镜像文件ISO
+3. 系统随后启动Ubuntu。
+4. 把你的系统连接到网络，确保它有互联网接入。
+5. 在Ubuntu中，打开浏览器并打开当前文档页面，这样你可以按照步骤作。
+6. 从那里开始，[下载HAOS镜像](https://github.com/home-assistant/operating-system/releases/download/16.3/haos_generic-x86-64-16.3.img.xz).
+7. 在Ubuntu中，左下角选择“显示应用程序”。
+8. 在应用程序中搜索并打开磁盘，开始恢复HAOS映像：
+9. 在磁盘中，左侧选择你想安装HAOS的内部磁盘设备。
+10. 在屏幕顶部，选择三点菜单，选择“恢复磁盘映像......”。恢复磁盘映像：选择三点菜单
+11. 选择你刚下载的图片。恢复磁盘映像：选择映像
+12. 选择开始恢复......。恢复磁盘镜像：开始恢复
+13. 请选择恢复确认。恢复磁盘镜像：选择恢复
+14. 重启得到home-assistant管理地址

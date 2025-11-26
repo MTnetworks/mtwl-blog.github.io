@@ -36,9 +36,7 @@
 
 1. 进入PE后启动网络
 2. 通过浏览器下载Homeassistant镜像文件，下载地址：https://www.home-assistant.io/installation/generic-x86-64/
-3. 下载完后解压得到IMG文件，
-4. 然后通过DiskGenius工具将IMG文件恢复至镜像系统盘
-5. 重启得到home-assistant管理地址。">
+3. 下载完后解压得到IMG文件。">
 <meta property="og:title" content="如何在Truenas上安装独立的Home-assistant">
 <meta property="og:description" content="### Truenas上安装独立的Home-assistant使用虚拟机部署
 **重要提醒** 在创建虚拟机之前先创建**2块数据集**（Dataset）格式为**Zvol**，分别存储下载的镜像文件和恢复的恢复的镜像系统盘
@@ -66,9 +64,7 @@
 
 1. 进入PE后启动网络
 2. 通过浏览器下载Homeassistant镜像文件，下载地址：https://www.home-assistant.io/installation/generic-x86-64/
-3. 下载完后解压得到IMG文件，
-4. 然后通过DiskGenius工具将IMG文件恢复至镜像系统盘
-5. 重启得到home-assistant管理地址。">
+3. 下载完后解压得到IMG文件。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://MTnetworks.github.io/mtwl-blog.github.io/post/ru-he-zai-Truenas-shang-an-zhuang-du-li-de-Home-assistant.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -158,8 +154,23 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <ol>
 <li>进入PE后启动网络</li>
 <li>通过浏览器下载Homeassistant镜像文件，下载地址：<a href="https://www.home-assistant.io/installation/generic-x86-64/" rel="nofollow">https://www.home-assistant.io/installation/generic-x86-64/</a></li>
-<li>下载完后解压得到IMG文件，</li>
-<li>然后通过DiskGenius工具将IMG文件恢复至镜像系统盘</li>
+<li>下载完后解压得到IMG文件。</li>
+</ol>
+<p><strong>3.通过<a href="https://ubuntu.com/tutorials/try-ubuntu-before-you-install" rel="nofollow">Ubuntu Desktop试用版</a>进行安装Homeassistant系统</strong></p>
+<ol>
+<li>提前将Ubuntu Desktop镜像文件ISO放入共享文件里</li>
+<li>修改设备类型：将CD-ROM文件修改为Ubuntu Desktop镜像文件ISO</li>
+<li>系统随后启动Ubuntu。</li>
+<li>把你的系统连接到网络，确保它有互联网接入。</li>
+<li>在Ubuntu中，打开浏览器并打开当前文档页面，这样你可以按照步骤作。</li>
+<li>从那里开始，<a href="https://github.com/home-assistant/operating-system/releases/download/16.3/haos_generic-x86-64-16.3.img.xz">下载HAOS镜像</a>.</li>
+<li>在Ubuntu中，左下角选择“显示应用程序”。</li>
+<li>在应用程序中搜索并打开磁盘，开始恢复HAOS映像：</li>
+<li>在磁盘中，左侧选择你想安装HAOS的内部磁盘设备。</li>
+<li>在屏幕顶部，选择三点菜单，选择“恢复磁盘映像......”。恢复磁盘映像：选择三点菜单</li>
+<li>选择你刚下载的图片。恢复磁盘映像：选择映像</li>
+<li>选择开始恢复......。恢复磁盘镜像：开始恢复</li>
+<li>请选择恢复确认。恢复磁盘镜像：选择恢复</li>
 <li>重启得到home-assistant管理地址</li>
 </ol></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
