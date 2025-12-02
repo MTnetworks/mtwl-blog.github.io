@@ -8,5 +8,6 @@ install-dev-tools
 ```
 bash -c "$(curl -sSL https://resource.fit2cloud.com/1panel/package/v2/quick_start.sh)"
 ```
+5.ssh 登录 1Panel 服务器后，执行 `1pctl user-info` 命令可获取安全入口（entrance）
 
 附：[境内 Docker 镜像状态监控列表](https://status.anye.xyz/)
